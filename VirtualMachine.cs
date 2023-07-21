@@ -28,9 +28,14 @@ namespace func.brainfuck
 		{
 			while (InstructionPointer < Instructions.Length)
 			{
-				if (all.ContainsKey(Instructions[InstructionPointer]))
+                if (all.ContainsKey((char)Instructions[InstructionPointer]))
 				{
 					all[Instructions[InstructionPointer]](this);
+				}
+
+				else
+				{
+
 				}
                 InstructionPointer++;
             }

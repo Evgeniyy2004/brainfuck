@@ -5,42 +5,42 @@ using System.Text;
 
 namespace func.brainfuck
 {
-	public class BrainfuckBasicCommands
-	{
-		public static void RegisterTo(IVirtualMachine vm, Func<int> read, Action<char> write)
-		{
-            var r = (byte)'\x1';
-            vm.RegisterCommand('.', b => write(System.Text.Encoding.ASCII.GetString(vm.Memory, vm.MemoryPointer, 1)[0]));
+    public class BrainfuckBasicCommands
+    {
+        public static void RegisterTo(IVirtualMachine vm, Func<int> read, Action<char> write)
+        {
+            vm.RegisterCommand('.', b => write(Convert.ToChar(vm.Memory[vm.MemoryPointer])));
             vm.RegisterCommand('+', b =>
             {
-                if (vm.Memory[vm.MemoryPointer]<255) vm.Memory[vm.MemoryPointer]++;
+                if (vm.Memory[vm.MemoryPointer] < 255) vm.Memory[vm.MemoryPointer]++;
                 else vm.Memory[vm.MemoryPointer] = 0;
-
             });
             vm.RegisterCommand('-', b =>
             {
                 if (vm.Memory[vm.MemoryPointer] > 0) vm.Memory[vm.MemoryPointer]--;
                 else vm.Memory[vm.MemoryPointer] = 255;
-
             });
-            vm.RegisterCommand(',', b => vm.Memory[vm.MemoryPointer]=(byte)read());
-            vm.RegisterCommand('>', b => 
+            vm.RegisterCommand(',', b => vm.Memory[vm.MemoryPointer] = (byte)read());
+            vm.RegisterCommand('>', b =>
             {
                 if (vm.MemoryPointer < vm.Memory.Length - 1) vm.MemoryPointer++;
-                else vm.MemoryPointer=0;
-                    
+                else vm.MemoryPointer = 0;
             });
             vm.RegisterCommand('<', b =>
             {
-                if (vm.MemoryPointer> 0) vm.MemoryPointer--;
-                else vm.MemoryPointer = vm.Memory.Length-1;
+                if (vm.MemoryPointer > 0) vm.MemoryPointer--;
+                else vm.MemoryPointer = vm.Memory.Length - 1;
+            });           
+            RegisterDigitsAndLetters(vm);
+        }
 
-            });
-            for (char i='a';i<='z';i++)
-			{
-				var c =i;
+        public static void RegisterDigitsAndLetters(IVirtualMachine vm)
+        {
+            for (char i = 'a'; i <= 'z'; i++)
+            {
+                var c = i;
                 var l = (byte)i;
-                vm.RegisterCommand(c, b => vm.Memory[vm.MemoryPointer]= l);
+                vm.RegisterCommand(c, b => vm.Memory[vm.MemoryPointer] = l);
             }
 
             for (char i = 'A'; i <= 'Z'; i++)
@@ -50,12 +50,12 @@ namespace func.brainfuck
                 vm.RegisterCommand(c, b => vm.Memory[vm.MemoryPointer] = l);
             }
 
-            for (int i = 0;i<10;i++)
+            for (char c = '0'; c <= '9'; c++)
             {
-                var c = (char)i;
-                var l = (byte)i;
-                vm.RegisterCommand(c, b => vm.Memory[vm.MemoryPointer] = l);
+                char p = c;
+                var l = (byte)c;
+                vm.RegisterCommand(p, b => vm.Memory[vm.MemoryPointer] = l);
             }
         }
-	}
+    }
 }
