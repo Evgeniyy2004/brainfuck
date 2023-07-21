@@ -9,7 +9,8 @@ namespace func.brainfuck
 	{
 		public static void RegisterTo(IVirtualMachine vm, Func<int> read, Action<char> write)
 		{
-			vm.RegisterCommand('.', b => write(System.Text.Encoding.ASCII.GetString(vm.Memory, vm.MemoryPointer, 1)[0]));
+            var r = (byte)'\x1';
+            vm.RegisterCommand('.', b => write(System.Text.Encoding.ASCII.GetString(vm.Memory, vm.MemoryPointer, 1)[0]));
             vm.RegisterCommand('+', b =>
             {
                 if (vm.Memory[vm.MemoryPointer]<255) vm.Memory[vm.MemoryPointer]++;
