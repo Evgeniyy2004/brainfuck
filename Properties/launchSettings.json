@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "func-brainfuck": {
+      "commandName": "Project",
+      "hotReloadEnabled": true
+    }
+  }
+}
